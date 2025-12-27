@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Serenity | Mental Health Platform</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f2f7f6;
+            margin: 0;
+        }
+        header {
+            background: #5fb3a2;
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        nav {
+            text-align: center;
+            margin: 20px;
+        }
+        nav a {
+            margin: 15px;
+            color: #5fb3a2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        section {
+            text-align: center;
+            padding: 30px;
+        }
+        .card {
+            background: white;
+            padding: 25px;
+            margin: 15px;
+            display: inline-block;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .mood-btn {
+            font-size: 22px;
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Serenity</h1>
+    <p>Your Digital Mental Health Companion</p>
+</header>
+
+<nav>
+    <a href="/">Home</a>
+    <a href="/journal">Journal</a>
+    <a href="/resources">Resources</a>
+</nav>
+
+<section>
+    <div class="card">
+        <h3>How are you feeling today?</h3>
+        <form action="/addMood" method="post">
+            <button class="mood-btn" name="mood" value="1">😞</button>
+            <button class="mood-btn" name="mood" value="2">😐</button>
+            <button class="mood-btn" name="mood" value="3">😊</button>
+            <button class="mood-btn" name="mood" value="4">😄</button>
+            <button class="mood-btn" name="mood" value="5">😁</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h3>Mood History</h3>
+        <p th:if="${moods.size() == 0}">No moods recorded yet</p>
+        <ul>
+            <li th:each="m : ${m}">
+                Mood Level: <span th:text="${m}"></span>
+            </li>
+        </ul>
+    </div>
+</section>
+
+</body>
+</html>
