@@ -1,0 +1,250 @@
+// ==============================
+// Serenity - Java Web Application
+// Technology: Spring Boot + Thymeleaf
+// ==============================
+
+// ---------- 1. pom.xml ----------
+/*
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.serenity</groupId>
+    <artifactId>serenity</artifactId>
+    <version>1.0</version>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.0</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+*/
+
+// ---------- 2. Main Application ----------
+package com.serenity;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class SerenityApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(SerenityApplication.class, args);
+    }
+}
+
+// ---------- 3. Controller ----------
+package com.serenity.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Controller
+public class SerenityController {
+
+    // In-memory mood storage (no database)
+    private List<Integer> moodHistory = new ArrayList<>();
+
+    @GetMapping("/")
+    public String home(Model model) {
+        model.addAttribute("moods", moodHistory);
+        return "index";
+    }
+
+    @PostMapping("/addMood")
+    public String addMood(@RequestParam("mood") int mood) {
+        moodHistory.add(mood);
+        return "redirect:/";
+    }
+
+    @GetMapping("/journal")
+    public String journal() {
+        return "journal";
+    }
+
+    @GetMapping("/resources")
+    public String resources() {
+        return "resources";
+    }
+}
+
+// ---------- 4. index.html ----------
+/* Place in: src/main/resources/templates/index.html */
+/*
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Serenity | Mental Health Platform</title>
+    <style>
+        body { font-family: Arial; background:#f2f7f6; margin:0; }
+        header { background:#5fb3a2; color:white; padding:40px; text-align:center; }
+        nav a { margin:15px; color:#5fb3a2; text-decoration:none; font-weight:bold; }
+        section { padding:40px; text-align:center; }
+        .card { background:white; padding:20px; margin:15px; display:inline-block; border-radius:10px; }
+        .mood-btn { padding:10px 15px; margin:5px; font-size:18px; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Serenity</h1>
+    <p>Your Digital Mental Health Companion</p>
+</header>
+
+<nav align="center">
+    <a href="/">Home</a>
+    <a href="/journal">Journal</a>
+    <a href="/resources">Resources</a>
+</nav>
+
+<section>
+    <div class="card">
+        <h3>How are you feeling today?</h3>
+        <form action="/addMood" method="post">
+            <button class="mood-btn" name="mood" value="1">😞</button>
+            <button class="mood-btn" name="mood" value="2">😐</button>
+            <button class="mood-btn" name="mood" value="3">😊</button>
+            <button class="mood-btn" name="mood" value="4">😄</button>
+            <button class="mood-btn" name="mood" value="5">😁</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h3>Mood History</h3>
+        <p th:if="${moods.size() == 0}">No moods recorded yet</p>
+        <ul>
+            <li th:each="m : ${moods}">Mood Level: <span th:text="${m}"></span></li>
+        </ul>
+    </div>
+</section>
+</body>
+</html>
+*/
+package com.serenity.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class SerenityController {
+
+    @GetMapping("/")
+    public String home() {
+        return "index";
+    }
+
+    @GetMapping("/journal")
+    public String journal() {
+        return "journal";
+    }
+
+    @GetMapping("/resources")
+    public String resources() {
+        return "resources";
+    }
+}
+
+// ---------- 4. index.html ----------
+/* Place in: src/main/resources/templates/index.html */
+/*
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Serenity | Mental Health Platform</title>
+    <style>
+        body { font-family: Arial; background:#f2f7f6; margin:0; }
+        header { background:#5fb3a2; color:white; padding:40px; text-align:center; }
+        nav a { margin:15px; color:#5fb3a2; text-decoration:none; font-weight:bold; }
+        section { padding:40px; text-align:center; }
+        .card { background:white; padding:20px; margin:15px; display:inline-block; border-radius:10px; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Serenity</h1>
+    <p>Your Digital Mental Health Companion</p>
+</header>
+
+<nav align="center">
+    <a href="/">Home</a>
+    <a href="/journal">Journal</a>
+    <a href="/resources">Resources</a>
+</nav>
+
+<section>
+    <div class="card">
+        <h3>Mood Tracking</h3>
+        <p>Track your daily emotions</p>
+    </div>
+    <div class="card">
+        <h3>Daily Journal</h3>
+        <p>Write your thoughts freely</p>
+    </div>
+    <div class="card">
+        <h3>Mental Health Tips</h3>
+        <p>Simple self-care advice</p>
+    </div>
+</section>
+</body>
+</html>
+*/
+
+// ---------- 5. journal.html ----------
+/*
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Journal</title></head>
+<body style="font-family:Arial; padding:40px;">
+<h2>Daily Journal</h2>
+<form>
+    <textarea rows="10" cols="50" placeholder="Write your thoughts..."></textarea><br><br>
+    <button type="submit">Save</button>
+</form>
+</body>
+</html>
+*/
+
+// ---------- 6. resources.html ----------
+/*
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Resources</title></head>
+<body style="font-family:Arial; padding:40px;">
+<h2>Mental Health Resources</h2>
+<ul>
+    <li>Breathing Exercises</li>
+    <li>Stress Management Tips</li>
+    <li>Helpline Numbers</li>
+</ul>
+</body>
+</html>
+*/
